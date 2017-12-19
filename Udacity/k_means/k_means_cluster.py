@@ -14,7 +14,7 @@ import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
 from sklearn.cluster import KMeans
-
+from sklearn.preprocessing import MinMaxScaler
 
 
 def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature 1", f2_name="feature 2"):
@@ -44,9 +44,20 @@ data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "r")
 data_dict.pop("TOTAL", 0)
 
 # Get min and max exercised_stock_options
-print(min(data_dict.values(), key=lambda x:x["exercised_stock_options"]), max((d for d in data_dict.values() if d["exercised_stock_options"]!="NaN"), key=lambda x:x["exercised_stock_options"]))
+print(min(data_dict.values(), key=lambda x:x["exercised_stock_options"])["exercised_stock_options"], max((d for d in data_dict.values() if d["exercised_stock_options"]!="NaN"), key=lambda x:x["exercised_stock_options"])["exercised_stock_options"])
 # Get min and max salary
-print(min((d for d in data_dict.values() if d["salary"]!="NaN"), key=lambda x:x["salary"]), max((d for d in data_dict.values() if d["salary"]!="NaN"), key=lambda x:x["salary"]))
+print(min((d for d in data_dict.values() if d["salary"]!="NaN"), key=lambda x:x["salary"])["salary"], max((d for d in data_dict.values() if d["salary"]!="NaN"), key=lambda x:x["salary"])["salary"])
+
+# Applying rescaling on features
+salaries = numpy.array([[477.],[1111258.],[200000.]])
+scaler=MinMaxScaler()
+scaler.fit_transform(salaries)
+# Found salary
+print(scaler.transform(numpy.array([[0.,200000.]])))
+options = numpy.array([[3285.],[34348384.],[1000000.]])
+scaler.fit_transform(options)
+# Found stock option rescaled
+print(scaler.transform(numpy.array([[0.,1000000.0]])))
 
 ### the input features we want to use
 ### can be any key in the person-level dictionary (salary, director_fees, etc.)

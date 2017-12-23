@@ -51,4 +51,4 @@ important_features = clf.feature_importances_.tolist()
 max_feature = max(clf.feature_importances_)
 print important_features.index(max_feature)
 # print vectorizer.get_feature_names()[14343]
-print [vectorizer.get_feature_names()[important_features.index(i)] for i in clf.feature_importances_ if i > 0.2]
+print [vectorizer.get_feature_names()[i mportant_features.index(i)] for i in clf.feature_importances_ if i > 0.2]

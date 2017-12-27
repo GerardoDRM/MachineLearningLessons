@@ -7,11 +7,12 @@ sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
 import matplotlib.pyplot
+from poi_email_addresses import poiEmails
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','salary', 'exercised_stock_options', 'long_term_incentive', 'bonus', 'expenses', 'deferral_payments'] # You will need to use more features
+features_list = ['poi','salary', 'exercised_stock_options', 'long_term_incentive', 'bonus', 'expenses', 'deferral_payments', 'poi_ratio_messages'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
 with open("final_project_dataset.pkl", "r") as data_file:
@@ -19,21 +20,41 @@ with open("final_project_dataset.pkl", "r") as data_file:
 
 ### Task 2: Remove outliers
 data_dict.pop('TOTAL', 0)
-data_dict.pop('LOCKHART EUGENE E',0) # All his data is N/A
 
 ### Task 3: Create new feature(s)
+# New feature relation between pois and messages ratio
+for name in data_dict:
+    # Clean data
+    email_features = ['from_messages', 'to_messages', 'from_poi_to_this_person', 'from_this_person_to_poi', 'shared_receipt_with_poi']
+    poi_ratio_messages = True
+    for e in email_features:
+        if data_dict[name][e] == 'NaN':
+            poi_ratio_messages = False
+            break
+    if poi_ratio_messages:
+        # Get total messages
+        total_messages = data_dict[name]['from_messages'] + data_dict[name]['to_messages']
+        poi_related_messages = data_dict[name]["from_poi_to_this_person"] +\
+                                        data_dict[name]["from_this_person_to_poi"] +\
+                                        data_dict[name]["shared_receipt_with_poi"]
+        poi_ratio = 1.* poi_related_messages / total_messages
+
+        data_dict[name]['poi_ratio_messages'] = poi_ratio
+    else:
+        data_dict[name]['poi_ratio_messages'] = 'NaN'
+
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
 
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
 for point in data:
-    salary = point[1]
-    bonus = point[5]
+    salary = point[0]
+    bonus = point[7]
     matplotlib.pyplot.scatter( salary, bonus )
 
-matplotlib.pyplot.xlabel("salary")
-matplotlib.pyplot.ylabel("expenses")
+matplotlib.pyplot.xlabel("poi")
+matplotlib.pyplot.ylabel("messages")
 matplotlib.pyplot.show()
 
 

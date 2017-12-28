@@ -6,8 +6,19 @@ sys.path.append("../tools/")
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
-import matplotlib.pyplot
 from poi_email_addresses import poiEmails
+from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import AdaBoostClassifier
+
+from sklearn.decomposition import PCA
+from sklearn.metrics import accuracy_score
+
+import matplotlib.pyplot as plt
+import pylab as pl
+import numpy as np
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
@@ -48,14 +59,17 @@ my_dataset = data_dict
 
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
-for point in data:
-    salary = point[0]
-    bonus = point[7]
-    matplotlib.pyplot.scatter( salary, bonus )
 
-matplotlib.pyplot.xlabel("poi")
-matplotlib.pyplot.ylabel("messages")
-matplotlib.pyplot.show()
+### Print data points
+
+# for point in data:
+#     salary = point[0]
+#     bonus = point[7]
+#    plt.scatter( salary, bonus )
+#
+# plt.xlabel("poi")
+# plt.ylabel("messages")
+# plt.show()
 
 
 labels, features = targetFeatureSplit(data)
@@ -68,8 +82,20 @@ labels, features = targetFeatureSplit(data)
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-from sklearn.naive_bayes import GaussianNB
-clf = GaussianNB()
+# Using Naive Bayes
+# algorithm = GaussianNB()
+# Using Support vector machine
+# algorithm = SVC()
+# # Using Decision Trees
+# algorithm = DecisionTreeClassifier()
+# # Using AdaBoost
+algorithm = AdaBoostClassifier(n_estimators=100)
+
+estimators = [('reduce_dim', PCA()), ('clf', algorithm)]
+clf = Pipeline(steps=estimators)
+
+
+
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall
 ### using our testing script. Check the tester.py script in the final project
@@ -78,11 +104,15 @@ clf = GaussianNB()
 ### stratified shuffle split cross validation. For more info:
 ### http://scikit-learn.org/stable/modules/generated/sklearn.cross_validation.StratifiedShuffleSplit.html
 
-# Example starting point. Try investigating other evaluation techniques!
+# Example starting matplotlib.pyplotpoint. Try investigating other evaluation techniques!
 from sklearn.cross_validation import train_test_split
 features_train, features_test, labels_train, labels_test = \
     train_test_split(features, labels, test_size=0.3, random_state=42)
 
+# Check accuracy
+clf.fit(features_train, labels_train)
+pred = clf.predict(features_test)
+print("ACCURACY", accuracy_score(pred, labels_test))
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
 ### that the version of poi_id.py that you submit can be run on its own and

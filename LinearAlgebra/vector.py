@@ -19,3 +19,12 @@ class Vector(object):
 
     def __eq__(self, v):
         return self.coordinates == v.coordinates
+
+    def __add__(self, v):
+        return tuple([val + self.coordinates[idx] for idx, val in enumerate(v.coordinates)])
+
+    def __sub__(self, v):
+        return tuple([self.coordinates[idx] - val for idx, val in enumerate(v.coordinates)])
+
+    def scalar_mult(self, v):
+        return tuple([val * v  for val in self.coordinates])

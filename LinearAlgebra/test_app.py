@@ -19,6 +19,10 @@ class TestVector(TestCase):
         self.assertTrue(Vector([-0.221, 7.437]).magnitude() == 7.440282924728065)
         self.assertTrue(Vector([5.581, -2.136]).direction() == (0.9339352140866403, -0.35744232526233))
 
+    def test_dotproduct_angles(self):
+        self.assertTrue(Vector([7.887, 4.138]).dot_product(Vector([-8.802, 6.776])) == -41.382286)
+        self.assertTrue(Vector([3.183, -7.627]).angle(Vector([-2.668, 5.319])) == (3.0720263098372476, 176.01414210682285))
+
 
 if __name__ == "__main__":
     main()

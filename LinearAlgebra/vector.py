@@ -1,3 +1,5 @@
+from math import acos, degrees
+
 class Vector(object):
     def __init__(self, coordinates):
         try:
@@ -36,3 +38,12 @@ class Vector(object):
         # Get magnitude
         mag = self.magnitude()
         return tuple([val * 1/mag  for val in self.coordinates])
+
+    def dot_product(self, v):
+        return sum([val * self.coordinates[idx] for idx, val in enumerate(v.coordinates)])
+
+    def angle(self, v):
+        dot = self.dot_product(v)
+        radians = acos(dot / (self.magnitude() * v.magnitude()))
+        d = degrees(radians)
+        return (radians, d)

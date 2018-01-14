@@ -15,5 +15,10 @@ class TestVector(TestCase):
         v_mult = Vector([1.671, -1.012, -0.318])
         self.assertTrue(v_mult.scalar_mult(7.41) == (12.38211, -7.49892, -2.35638))
 
+    def test_magnitude_direction(self):
+        self.assertTrue(Vector([-0.221, 7.437]).magnitude() == 7.440282924728065)
+        self.assertTrue(Vector([5.581, -2.136]).direction() == (0.9339352140866403, -0.35744232526233))
+
+
 if __name__ == "__main__":
     main()

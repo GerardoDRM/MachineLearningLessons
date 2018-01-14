@@ -28,3 +28,11 @@ class Vector(object):
 
     def scalar_mult(self, v):
         return tuple([val * v  for val in self.coordinates])
+
+    def magnitude(self):
+        return sum(val**2 for val in self.coordinates) ** (0.5)
+
+    def direction(self):
+        # Get magnitude
+        mag = self.magnitude()
+        return tuple([val * 1/mag  for val in self.coordinates])

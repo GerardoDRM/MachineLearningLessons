@@ -85,7 +85,7 @@ class Plane(object):
 
             return output
 
-        n = self.normal_vector
+        n = self.normal_vector.coordinates
 
         try:
             initial_index = Plane.first_nonzero_index(n)

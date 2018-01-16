@@ -47,3 +47,14 @@ class Vector(object):
         radians = acos(dot / (self.magnitude() * v.magnitude()))
         d = degrees(radians)
         return (radians, d)
+
+    def is_orthogonal_to(self, v, tolerance=1e-10):
+        return abs(self.dot(v)) < tolerance
+
+    def is_parallel_to(self, v):
+        return (self.is_zero() or
+                v.is_zero() or self.angle()[0] == 0 or
+                self.angle_with(v) == pi)
+
+    def is_zero(self, tolerance=1e-10):
+        return self.magnitude() < tolerance

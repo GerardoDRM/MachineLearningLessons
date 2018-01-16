@@ -1,5 +1,6 @@
 from vector import Vector
 from unittest import TestCase, main
+from line import Line
 
 class TestVector(TestCase):
 
@@ -23,6 +24,14 @@ class TestVector(TestCase):
         self.assertTrue(Vector([7.887, 4.138]).dot_product(Vector([-8.802, 6.776])) == -41.382286)
         self.assertTrue(Vector([3.183, -7.627]).angle(Vector([-2.668, 5.319])) == (3.0720263098372476, 176.01414210682285))
 
+
+class TestLine(TestCase):
+
+    def test_intersection(self):
+        # Which is the vectors intersection
+        ell1 = Line(Vector([7.204, 3.182]), '8.68')
+        ell2 = Line(Vector([8.172, 4.114]), '9.883')
+        print(ell1.insertection_with(ell2))
 
 if __name__ == "__main__":
     main()
